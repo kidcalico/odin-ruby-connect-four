@@ -92,10 +92,10 @@ describe Play do
         game.board_array[4][2] = red_circle
       end
       
-      it 'returns nil' do
+      it 'returns false' do
         piece = red_circle
         last_row = 3
-        expect(game.column_win?(last_row, move, piece)).to be nil
+        expect(game.column_win?(last_row, move, piece)).to be false
       end
     end
     
@@ -127,11 +127,11 @@ describe Play do
         game.board_array[6][6] = yellow_circle
       end
 
-      it 'returns nil' do
+      it 'returns false' do
         piece = yellow_circle
         last_row = 6
         result = game.row_win?(last_row, move, piece)
-        expect(result).to be nil
+        expect(result).to be false
       end
     end
 
@@ -159,7 +159,7 @@ describe Play do
       before do
         game.board_array[5][2] = red_circle
         game.board_array[4][3] = red_circle
-        game.board_array[3][2] = red_circle
+        game.board_array[3][4] = red_circle
       end
 
       it 'returns true' do
@@ -167,6 +167,33 @@ describe Play do
         last_row = 6
         result = game.diagonal_win?(last_row, move, piece)
         expect(result).to be true
+      end
+    end
+
+    context 'when last move does now create a diagonal win' do
+      before do
+        game.board_array[5][2] = red_circle
+        game.board_array[4][3] = yellow_circle
+        game.board_array[3][4] = red_circle
+      end
+
+      it 'returns false' do
+        piece = red_circle
+        last_row = 6
+        result = game.diagonal_win?(last_row, move, piece)
+        expect(result).to be false
+      end
+    end
+  end
+
+  describe '#board_full?' do
+    context 'if the board has no more blank spaces' do
+      before do
+        game.board_array = [["\e[0;44m                \e[0m\n"], ["\e[0;44m \e[0m", "\e[0;44m🔴\e[0m", "\e[0;44m🔴\e[0m", "\e[0;44m🟡\e[0m", "\e[0;44m🟡\e[0m", "\e[0;44m🟡\e[0m", "\e[0;44m🔴\e[0m", "\e[0;44m🟡\e[0m", "\e[0;44m \e[0m\n"], ["\e[0;44m \e[0m", "\e[0;44m🟡\e[0m", "\e[0;44m🔴\e[0m", "\e[0;44m🟡\e[0m", "\e[0;44m🟡\e[0m", "\e[0;44m🔴\e[0m", "\e[0;44m🟡\e[0m", "\e[0;44m🔴\e[0m", "\e[0;44m \e[0m\n"], ["\e[0;44m \e[0m", "\e[0;44m🟡\e[0m", "\e[0;44m🟡\e[0m", "\e[0;44m🟡\e[0m", "\e[0;44m🟡\e[0m", "\e[0;44m🟡\e[0m", "\e[0;44m🟡\e[0m", "\e[0;44m🟡\e[0m", "\e[0;44m \e[0m\n"], ["\e[0;44m \e[0m", "\e[0;44m🔴\e[0m", "\e[0;44m🟡\e[0m", "\e[0;44m🔴\e[0m", "\e[0;44m🟡\e[0m", "\e[0;44m🟡\e[0m", "\e[0;44m🟡\e[0m", "\e[0;44m🟡\e[0m", "\e[0;44m \e[0m\n"], ["\e[0;44m \e[0m", "\e[0;44m🟡\e[0m", "\e[0;44m🟡\e[0m", "\e[0;44m🔴\e[0m", "\e[0;44m🟡\e[0m", "\e[0;44m🔴\e[0m", "\e[0;44m🟡\e[0m", "\e[0;44m🔴\e[0m", "\e[0;44m \e[0m\n"], ["\e[0;44m \e[0m", "\e[0;44m🟡\e[0m", "\e[0;44m🟡\e[0m", "\e[0;44m🔴\e[0m", "\e[0;44m🟡\e[0m", "\e[0;44m🔴\e[0m", "\e[0;44m🔴\e[0m", "\e[0;44m🔴\e[0m", "\e[0;44m \e[0m\n"], ["\e[0;44m 1 2 3 4 5 6 7  \e[0m\n"]]
+      end
+
+      it 'returns true' do
+        expect(game.board_full?).to be true
       end
     end
   end

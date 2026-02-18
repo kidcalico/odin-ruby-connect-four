@@ -63,11 +63,7 @@ class Play
 
   def winner?(row, column, color)
     piece = match(color)
-    if column_win?(row, column, piece) == true || row_win?(row, column, piece) == true || diagonal_win?(row, column, piece) == true
-      return true
-    else
-      return false
-    end
+    column_win?(row, column, piece) || row_win?(row, column, piece) || diagonal_win?(row, column, piece)
   end
 
   def match(color)
@@ -78,6 +74,7 @@ class Play
   def column_win?(row, column, piece)
     return true if @board_array[row + 1][column] == piece && 
       @board_array[row + 2][column] == piece && @board_array[row + 3][column] == piece
+    return false
   end
 
   def row_win?(row, column, piece)
@@ -89,37 +86,59 @@ class Play
        @board_array[row][column + 1] == piece && @board_array[row][column + 2] == piece
     return true if @board_array[row][column + 1] == piece &&
        @board_array[row][column + 2] == piece && @board_array[row][column + 3] == piece
+    return false
   end
 
   def diagonal_win?(row, column, piece)
-    return true if @board_array[row - 3][column - 3] && @board_array[row - 2][column - 2] && @board_array[row - 1][column - 1]
-    return true if @board_array[row - 2][column - 2] && @board_array[row - 1][column - 1] && @board_array[row + 1][column + 1]
-    return true if @board_array[row - 1][column - 1] && @board_array[row + 1][column + 1] && @board_array[row + 2][column + 2]
-    return true if @board_array[row + 1][column + 1] && @board_array[row + 2][column + 2] && @board_array[row + 3][column + 3]
+    return true if @board_array[row - 3][column - 3] == piece && @board_array[row - 2][column - 2] == piece && @board_array[row - 1][column - 1] == piece
+    return true if @board_array[row - 2][column - 2] == piece && @board_array[row - 1][column - 1] == piece && @board_array[row + 1][column + 1] == piece
+    return true if @board_array[row - 1][column - 1] == piece && @board_array[row + 1][column + 1] == piece && @board_array[row + 2][column + 2] == piece
+    return true if @board_array[row + 1][column + 1] == piece && @board_array[row + 2][column + 2] == piece && @board_array[row + 3][column + 3] == piece
 
-    return true if @board_array[row - 3][column + 3] && @board_array[row - 2][column + 2] && @board_array[row - 1][column + 1]
-    return true if @board_array[row - 2][column + 2] && @board_array[row - 1][column + 1] && @board_array[row + 1][column - 1]
-    return true if @board_array[row - 1][column + 1] && @board_array[row + 1][column - 1] && @board_array[row + 2][column - 2]
-    return true if @board_array[row + 1][column - 1] && @board_array[row + 2][column - 2] && @board_array[row + 3][column - 3]
+    return true if @board_array[row - 3][column + 3] == piece && @board_array[row - 2][column + 2] == piece && @board_array[row - 1][column + 1] == piece
+    return true if @board_array[row - 2][column + 2] == piece && @board_array[row - 1][column + 1] == piece && @board_array[row + 1][column - 1] == piece
+    return true if @board_array[row - 1][column + 1] == piece && @board_array[row + 1][column - 1] == piece && @board_array[row + 2][column - 2] == piece
+    return true if @board_array[row + 1][column - 1] == piece && @board_array[row + 2][column - 2] == piece && @board_array[row + 3][column - 3] == piece
+    return false
+  end
+
+  def win_display(color)
+    display_board
+    puts "Congratulations!!! Yellow is the winner!" if color == 'yellow'
+    puts "Congratulations!!! Red is the winner!" if color == 'red'
+  end
+
+  def board_full?
+    @board_array[1..6].all? do |array|
+      array[1..7].all? do |space|
+        space != @board.blank
+      end
+    end
   end
 
   def play
     loop do
       turn('yellow')
-      # if winner?(@last_row, @last_column, 'yellow') == true
-      #   puts "Congratulations!!! Yellow is the winner!"
-      #   display_board
-      #   return
-      # end
+      if board_full?
+        puts "It's a tie! Try again."
+        return
+      end
+      if winner?(@last_row, @last_column, 'yellow')
+        win_display('yellow')
+        return
+      end
       turn('red')
-      # if winner?(@last_row, @last_column, 'red') == true
-      #   puts "Congratulations!!! Red is the winner!"
-      #   display_board
-      #   return
-      # end
+      if board_full?
+        puts "It's a tie! Try again."
+        return
+      end
+      if winner?(@last_row, @last_column, 'red')
+        win_display('red')
+        return
+      end
     end
   end
 end
 
-game = Play.new
-game.play
+# game = Play.new
+# p game.board_array

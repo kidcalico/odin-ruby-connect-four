@@ -6,17 +6,14 @@ class Board
   end
 
   def blank
-    # "\u{26AB}"
     "\e[0;44m\u{26AB}\e[0m"
   end
 
   def yellow
-    # "\u{1F7E1}"
     "\e[0;44m\u{1F7E1}\e[0m"
   end
 
   def red
-    # "\u{1F534}"
     "\e[0;44m\u{1F534}\e[0m"
   end
 
@@ -26,7 +23,6 @@ class Board
       @row << blank
     end
     @row << "\e[0;44m \e[0m\n"
-    # @row
   end
 
   def build_board
